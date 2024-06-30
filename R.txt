@@ -1,0 +1,880 @@
+	getwd()
+setwd("C:/Users/Chisom/OneDrive/Desktop/New folder")
+getwd()
+setwd("C:/Users/Chisom/OneDrive/Documents")	
+2+3
+a=4+4
+a
+print(a)
+
+b<-2+3
+b
+print(b)
+a+b
+a*b
+
+1+1
+
+print("Result: a")
+cat("Result:", a)
+
+Scores<-c(2,3,4)
+Scores
+Score_s<-c("2","3","4") 
+Score_s
+cat("No:", Scores)
+class(Scores)
+
+
+Score_s[[2]] - To get the value in a particular position
+
+length(Score_s) - To get the lenght of 
+
+str(Score_s)
+
+even<-seq(from=2, to=10, by=2)
+even
+cat("List even No:", even)
+
+install.packages("tidyverse")
+library(tidyverse)
+
+ID<-c(1,2,3)
+Name<-c("chi","som","nwa")
+Score<-c("5","10","15")
+Student<-data.frame(ID,Name,Score)
+Student
+
+ncol(Student)
+nrow(Student)
+
+str(Student)
+
+Student$Name
+Student$Name[[2]]
+
+data("chickWeight")
+chickweight
+
+install.packages("dslabs")
+library(dslabs)
+
+data("Chickweight")
+chickweight
+
+install.packages("dslabs")
+library(dslabs)
+data("ChickWeight")
+ChickWeight
+nrow(ChickWeight)
+help(ChickWeight)
+
+Superstore<-read.csv("C:/Users/Chisom/OneDrive/Desktop/New folder.csv")
+superstore
+
+plot(Student$ID, Student$Score)
+
+plot(Student$ID, Student$Score, 
+     col="#cc0000",
+     pch=19,
+     main="Command Students",
+
+gapminder %>% select(country, continent, year, lifeExp) %>%
+  filter(continent=="Africa") %>%
+  mutate(Jake = year/lifeExp) %>%
+  arrange(year)
+
+
+***Conditional propablity P(A|B) = P(AnB)/P(B)
+OR How many A is in B total
+what is the probality of picking a blue marble given that you picked it from bowl A 
+= Number of blue marble in bowl A 
+= Blue marbles/total marbles in bowl A
+
+Law of Total Probabilty PA = P(AnB1) + P(AnB2) + P(AnB3)
+what is the probality of pick A from bags B1, B2 or B3
+
+
+canada_data<-covid_19 %>% 
+  filter(country=="Canada" & province != "Diamond Princess" & province != "Grand Princess" & province != "Repatriated Travellers")
+canada_data
+view(canada_data)
+unique(canada_data$province)
+
+#NUMBER OF CASES BY PROVINCE
+
+cs<-covid_19 %>% 
+  filter(country=="Canada" & province != "Diamond Princess" & province != "Grand Princess" & province != "Repatriated Travellers") %>% 
+  group_by(province) %>% 
+  summarise(total_cases=sum(cases))
+cs
+
+gd<-cs %>% 
+  ggplot(aes(x=province, y=total_cases))+
+  geom_point()+
+  theme(axis.text.x=element_text(angle=90))
+gd
+
+#CONFIRMED CASES VS DEATHS
+
+jf<-covid_19 %>% 
+  filter(country=="Canada" & province != "Diamond Princess" & province != "Grand Princess" & province != "Repatriated Travellers") %>% 
+  group_by(province, type) %>% 
+  summarise(die=length(type)) %>% 
+  pivot_wider(names_from = type, values_from = die)
+jf
+
+pie_chart<-jf %>%
+  ggplot(aes(x="", y=type, fill=type))+
+  geom_bar(stat="identity", width=1)+
+  coord_polar(theta="y", start=0)
+pie_chart
+  
+
+jf<-covid_19 %>% 
+  filter(country=="Canada" & province != "Diamond Princess" & province != "Grand Princess" & province != "Repatriated Travellers")
+jf
+
+
+##CASES BY POPULATION
+
+#It can seen that there is positive correlation between
+#total case recorded and the total of population of the Province/Territories
+#The Visualization shows that province/territory with higher population recorded high number cases 
+#Whereas lower population province/territories recorded lower cases
+#Except for Alberta which recorded more cases than British Columbia with a higher population
+pop_cases<-covid_19 %>% 
+  filter(country=="Canada" & province!="Diamond Princess" & province!="Grand Princess" & province!="Repatriated Travellers") %>% 
+  group_by(province, population) %>% 
+  summarise(total_cases=sum(cases)) %>% 
+  ggplot(aes(x=total_cases, y=population))+
+  geom_point()
+pop_cases
+
+
+jf<-covid_19 %>% 
+  filter(country=="Canada" & province != "Diamond Princess" & province != "Grand Princess" & province != "Repatriated Travellers") %>% 
+  group_by(province, type) %>% 
+  summarise(Case_Type=length(type)) %>% 
+  ggplot(aes(x=province, y=Case_Type, fill=type))+
+  geom_bar(stat="identity")+
+  facet_grid(type~.)+
+  theme(axis.text.x=element_text(angle=90))+
+  xlab("PROVINCE/TERRITORIES")
+jf
+
+
+library(tidyverse)
+library(dslabs)
+library(ggplot2)
+library(readxl)
+options(scipen=999)
+
+covid_19<-read.csv("https://raw.githubusercontent.com/RamiKrispin/coronavirus/master/csv/coronavirus.csv")
+covid_19
+
+pop_cases<-covid_19 %>% 
+  filter(country=="Canada" & province!="Diamond Princess" & province!="Grand Princess" & province!="Repatriated Travellers") %>% 
+  group_by(province, population) %>% 
+  summarise(total_cases=sum(cases))
+pop_cases
+
+popcases_chart<-pop_cases %>% 
+  ggplot(aes(x=population, y=total_cases, color=province))+
+  geom_point()+
+  xlab("Total Population")+
+  ylab("Total Cases")+
+  ggtitle("Relationship Between Population and Total Cases")
+popcases_chart
+
+
+type_province<-covid_19 %>% 
+  filter(country=="Canada" & province != "Diamond Princess" & province != "Grand Princess" & province != "Repatriated Travellers") %>% 
+  group_by(province, type) %>% 
+  summarise(Case_Type=length(type))
+type_province
+
+
+typeprovince_chart<-type_province %>% 
+  ggplot(aes(x=province, y=count_Type))+
+  geom_bar(stat="identity")+
+  facet_grid(type~.)+
+  theme(axis.text.x=element_text(angle=90))+
+  xlab("Province/Territory")+
+  ylab("Total Count")+
+  ggtitle("Count of Case Type by Province/Territory")
+typeprovince_chart
+
+
+view(mpg)
+?mpg
+
+mpg$class
+
+#BAR CHART
+
+bar_chart<-mpg %>% 
+  ggplot(aes(x=trans, fill=trans))+
+  geom_bar()+
+  theme(axis.text.x=element_text(angle=45))+
+  xlab("TRANSSSS")+
+  ggtitle("BAR CHART TEST RUN")
+bar_chart
+
+
+#SIDE BY SIDE BAR CHART
+
+side_by_side<-mpg %>% 
+  ggplot(aes(x=class, fill=drv))+
+  geom_bar(position="dodge")+
+  theme(axis.text.x=element_text(angle=90))+
+  xlab("class_by_drv")+
+  ggtitle("SIDE BY SIDE TEST RUN")
+side_by_side
+
+
+#PIE CHART
+
+pie_chart<-mpg %>% 
+  ggplot(aes(x="", y=fl, fill=fl))+
+  geom_bar(stat="identity", width=1)+
+  coord_polar(theta="y", start=0)+
+  theme_dark()
+pie_chart
+
+#HISTOGRAM
+
+histogram<-mpg %>% 
+  ggplot(aes(x=cty))+
+  geom_histogram(binwidth=5, color="blue", fill="yellow")+
+  theme(axis.text.x=element_text(angle=45))+
+  xlab("HISTOGRAM")+
+  ggtitle("HISTOGRAM TEST RUN")+
+  theme_dark()
+histogram
+
+
+#SCATTER PLOT
+
+scatter_plot<-mpg %>% 
+  ggplot(aes(x=cty, y=hwy))+
+  geom_point()+
+  ggtitle("SCATTER PLOT TEST RUN")+
+  xlab("CITY")+
+  ylab("HIGHWAY")
+scatter_plot
+
+
+#FACET GRID
+
+facet<-mpg %>% 
+  ggplot(aes(x=drv, fill=class))+
+  geom_bar()+
+  facet_grid(.~year)
+facet
+
+facet<-mpg %>% 
+  ggplot(aes(x=drv, fill=class))+
+  geom_bar()+
+facet_grid(year~.)
+facet
+
+getwd()
+setwd("C:/Users/Chisom/OneDrive/Desktop/SCHOOL")
+
+install.packages("readxl")
+library(readxl)
+library(tidyverse)
+library(dslabs)
+
+olympic<-read_xlsx("C:/Users/Chisom/OneDrive/Desktop/SCHOOL/2014_Olympics v2.xlsx", sheet="2014_Olympics")
+olympic
+
+view(olympic)
+
+#FILTERING
+
+#GETTING LIST OF ALL COUNTRIES
+
+countries<-unique(olympic$Country)
+countries
+
+us_female<-olympic %>% 
+  filter(Country=="United States" & Sex=="Female")
+us_female
+
+
+#summarizing TOTAL MEDALS FOR US FEMALES LESS THAN 35YRS
+
+us_female_medals<-olympic %>% 
+  filter(Country=="United States" & Sex=="Female" & Age<35) %>% 
+  summarise(total_medal=sum(Total))
+us_female_medals
+
+#TOTAL SILVER MEDAL FOR US NON-ICE HOCKEY ATHLETES
+
+us_not_hockey<-olympic %>% 
+  filter(Country=="United States" & Sport!="Ice hockey") %>% 
+  summarise(total_silver=sum(Silver))
+us_not_hockey
+
+
+#GROUP BY
+
+us_sponsorship<-olympic %>% 
+  filter(Country=="United States") %>% 
+  group_by(Sport) %>% 
+  summarise(total_deals=sum(SponsorDeals))
+us_sponsorship
+
+
+#SPONSORSHIP DISTRIBUTION FOR MALE & FEMALE BY COUNTRY
+
+unpivot<-olympic
+group_by(Country, Sex) %>% 
+  summarise(total_deals=sum(SponsorDeals)) %>% 
+  pivot_wider(names_from = Sex, values_from = total_deals)
+unpivot
+
+
+data("heights")
+head(heights)
+
+height_inches<-(heights$height)
+height_inches
+
+#histogram
+hist(height_inches)
+
+#Average
+mean(height_inches)
+
+#Median
+median(height_inches)
+
+
+#Mode
+table(height_inches)
+
+max(table(height_inches)) #max frequency (how many times it appears)
+
+name(which(max(table(height_inches))==table(height_inches))) #the number that appears the most
+
+#Range
+range(height_inches)
+
+#Standard Deviation
+sd(height_inches)
+
+#Variance
+var(height_inches)
+
+ #MEASURES OF POSITION
+#Median absolute deviation
+mad(height_inches)
+
+#Percentile
+quantile(height_inches, probs = c(0,0.25,0.50,0.57,1))
+
+#Interquartile range
+IQR(height_inches)
+
+#Summary
+summary(height_inches)
+
+heights %>% 
+  ggplot(aes(x=sex, y=height))+
+  geom_boxplot()+
+  geom_point()
+heights
+
+IF [Characteristic Name] = "15 to 64 years" THEN [C1 Count Total] END
+
+Used filter to remove non province outliers
+Unpivot Type - created a new column 
+Removed population duplicates
+Agregated to get perecentage confirmed cases
+
+It is clear from the vizualization that Ontario, Quebec and Alberta recorded the highest percenatage of confirmed cases 
+While Yukon, Nunavut and the Northwest Territories had the lowest percentage. 
+This distribution could be tied to the population desisty of the province/terrirories.
+
+higher number of confirmed cases
+
+percentage of the retirees
+
+Employment income groups in 2020 for the population aged 15 years and over in private households 
+
+Cleaned data 
+15975
+
+From the visualization it can be seen clearly that the Yukon recoreded the highest population rate increase between 2016 and 2021. 
+On the other hand, it interesting to see that 
+Northwest Territories and Newfoundland and Labrador record negative growth rates for same periods.
+
+The visualization seeks to find any relation between the the number of confirmed cases and the total population.
+It can seen that the bar graphs for the confirmed cases and the population look similar.
+Higher population areas recorded higher confirmed cases. This shows the there is a relation between the variables.
+
+Number of people older than 65 that dies from covid
+
+
+library(tidyverse)
+# CHI-SQAURE - COMAPRING THE MEAN OF 1 GROUP
+library(tidyverse)
+obs<-c(21,29,14,36)
+typelunch<-c("salad","sandwich","sepcial","own lunch")
+
+lunch<-data.frame(typelunch, obs)
+lunch
+
+chi<-chisq.test(lunch$obs)
+chi
+
+#ANOVA - COMAPRING THE MEAN OF 2 OR MORE GROUPS
+Person<- c("A","B","C","D","E","F","G")
+dose0mg	<- c(9,8,7,8,8,9,8)
+dose50mg<- c(7,6,6,7,8,7,6)
+dose100mg<- c(4,3	,2,3,4,3,2)
+
+df<-data.frame(Person,dose0mg,dose50mg,dose100mg)
+df
+
+#pivot to columns
+pivot <- df %>%
+  gather(key = group,
+         value = results,
+         -Person) 
+pivot 
+
+#groups MUST be as factor
+factor_pivot <- pivot%>%
+  mutate(group=factor(group))
+factor_pivot
+str(factor_pivot)
+
+anova_one_way <- aov(results ~ group, data=factor_pivot)
+anova_one_way
+summary(anova_one_way)
+# if p-value < 0.05 is statically significant, Reject H0
+
+#CORRELATION
+x <- c(1,2,3,4,5)
+y <- c(10,20,30,40,50)
+
+cor(x,y)
+
+  #alternatively
+x <- c(1,2,3,4,5)
+y <- c(10,20,30,40,50)
+corre<-data.frame(x,y)
+corre
+
+cor(corre)
+cor(corre$x, corre$y)
+
+#LINEAR REGRESSION
+data(cars)
+head(cars)
+
+# Step 1) Calculate linear regression y~x   #y = ax + b
+fit <- lm(formula = dist ~ speed, data = cars)
+fit
+
+summary(fit)
+
+#Step 2) Plot the points & regression line
+plot(cars) + 
+  abline(fit)
+
+#A normally distributed population of test scores 
+#has a mean of 80 and a standard deviation of 5.2. Find the percentage of scores that lies below 73.
+x<-72 
+mu<-70
+sd<-3
+area<-pnorm(x,mu,sd,lower.tail = TRUE)  #gives value of alpha which is percentage of area below the mean
+area
+
+z<-qnorm(area, lower.tail = TRUE)  #gives critical value z for the given area (alpha)
+z
+
+#A normally distributed population of test scores has a mean of 80 and a 
+#standard deviation of 5.2. Find the percentage of scores that lies above 73.
+
+x<-73
+mu<-80
+sigma<-5.2
+
+area<-pnorm(x,mu,sigma, lower.tail = FALSE) #give area above the mean
+area
+
+z<-qnorm(area, lower.tail = FALSE)  #gives critical value z for the area
+z
+
+
+#T-test
+
+#find two-tailed t critical values
+Left_t = qt(α/2 , df, lower.tail=TRUE)  #df= The degrees of freedom
+right_t= qt(α /2, df, lower.tail=FALSE)
+
+#find left tailed t critical values
+qt(α , df, lower.tail=TRUE)
+
+#find right tailed t critical values
+qt(α , df, lower.tail=FALSE)
+
+T<- (samplemean - mu)/ (sd/sqrt(n))
+T
+#or
+t.test(data, mu=mu, alternative= "two.sided") # 2-sided
+t.test(data, mu-mu, alternative= "less") # left sided
+t.test(data, mu=mu, alternative= "greater") # right sided
+
+pH <- c(4.70, 5.63, 5.02, 5.78, 4.99, 5.91, 5.76, 5.54, 5.25, 5.18, 5.01 )
+
+samplemean<- mean(pH)
+samplemean
+
+sd<- sd(pH)
+sd
+
+alpha<-10/100
+alpha
+
+mu<- 5.41
+n <-11
+
+df<-n-1
+df
+
+#find two-tailed t critical values
+left_t_2<-qt(alpha/2, df, lower.tail=TRUE) 
+left_t_2
+
+righ_t_2<-qt(alpha/2, df, lower.tail=FALSE) 
+righ_t_2
+
+# calculate t
+T<- (samplemean - mu)/ (sd/sqrt(n))
+T
+#or
+T_test <- t.test(pH, mu=mu,alternative="two.sided")
+T_test
+
+#Researches were testing vaccines in a mice. 
+#The weight <- c(17.6, 20.6, 22.2, 15.3,  20.9, 21.0, 18.9, 18.9,  18.9, 18.2). 
+#They want to know with 5% alpha if the mean weight of mice is less than 25g . 
+
+Ho: μ = 25g
+H1: μ < 25g
+
+weight <- c(17.6, 20.6, 22.2, 15.3,  20.9, 21.0, 18.9, 18.9,  18.9, 18.2)
+n <-length(weight)
+n
+
+samplemean<- mean(weight)  
+samplemean
+
+sd<-sd(weight)
+sd
+
+alpha<-5/100
+alpha
+
+qt(p=alpha, df, lower.tail=TRUE)
+
+
+T_test <- t.test(weight, mu=mu, alternative = "less")
+T_test
+
+
+#QUESTION 1
+Q1<-1.714
+Q3<-1.936
+
+IQR<-Q3 - Q1
+IQR
+
+lower_outlier<-Q1 - (1.5*IQR)
+lower_outlier
+
+upper_outlier<-Q3 + (1.5*IQR)
+upper_outlier
+
+
+#QUESTION 2
+alpha<-0.1
+qnorm(alpha, lower.tail = TRUE)
+
+
+#QUESTION 3 
+z<-1.960
+sigma<-108
+n<-55
+
+E<-(z*sigma)/sqrt(n)
+E
+
+
+#QUESTION 4
+z<-3.291
+sigma<-4
+n<-100
+
+E<-(z*sigma)/sqrt(n)
+E
+
+
+#QUESTION 5
+x<-140
+mu<-143
+sigma<-29
+
+z<-(x - mu)/sigma
+z
+
+
+#QUESTION 6
+alpha<-0.02
+qnorm(alpha, lower.tail = FALSE)
+
+
+#QUESTION 7
+z<-1.960
+sigma<-108
+n<-55
+sample_mean<-496
+
+E<-(z*sigma)/sqrt(n)
+E
+
+lower_limit<-sample_mean - E
+lower_limit
+
+
+
+What is the salary trend for Data Analyst in Canada? Also, add the average
+salary for Canadians.
+
+Advanced DA certificate
+
+What is the distribution of the DA students by region and related status
+(domestic & international)?
+
+{ FIXED [Likelihood to take another Data Analytics Advanced Certificate (0-10)]: AVG(1) }
+
+
+Most of the DA students are of African Origin with a total 24 students while sudents of European origin have the numbers with students in total.
+Domestic domestic students make up majority DA students with 53 students compared to only 13 International students. The ratio of Domestic to international students is 4:1
+This could be attributed to that fact that the DA certificate program does not lead to post-graduation work permit which make the program less attractive to international students
+
+Majority of the DA student very likely to advance their DA skills by taking the Advanced Data Analytics Certificate.
+Students need advanced skills to break into the DA indusry or for career advancement. 
+
+Northwest Terriroies pays the highest avarage salary with British Columbia paying the lowest.
+Interestingly, a slim majority of the Province/Territory pays below the average Canada salary for the period under review.
+The province/Territor where arranged from high highest population to lowest population, however, there's no observeable 
+pattern or trend for DA salaries. It can be concluded
+
+There more African and Domestic DA students, Majority of the students would very likely further
+There is need to need to re-structure the DA programe to make it more attractive to International students improve on the current 4:1 ratio with Domestic students
+
+
+To drill into the DA student survey data to gain insights into the 
+
+a student who completed a 2 year program (Fall enrollment) will be retained twice. do we count can as 2 retentions or 1 retention
+
+5100523532
+
+ANOVA
+
+ Head injury data of each car type is given below. Sample size N=20.
+
+midsize    <-c(469,    727,    525,    454,    259)
+fullsize    <-c(384,    656,    602,    687,    360)
+Subcompact <-c(681    ,428,    917,    898    ,420)
+compact    <-c(643,    655,    442,    514,    525)
+
+Question: Use 5% significance level, do you Reject H0 or fail to reject H0?
+
+H0: cars have the same mean.
+
+H1: The mean is different .
+
+Z-test
+
+Someone asks if the GPA of university students is equal B (i.e., GPA of 3.0). You disagree and believes that GPA is lower than 3.0. A survey with 140 participants was sent. Results indicated sample mean of 2.87, population standard deviation of 0.8. 
+
+Use a 5% level of significance to test this claim. 
+
+Question: What is the critical value z?
+
+
+Linear Regression
+
+Results from an interview with 12 mothers indicated their tolerance for pop surrealism art style.
+
+ H0: education level (in years) is a predictor of mothers' art tolerance (style).
+
+educational_level<- c(9,10,10,11,12,12,12,13,14,15,16,16)
+
+pop_surrealism_art <-c(3,4,5,4,4,6,7,6,6,6,7,8)
+
+
+Government Data:
+
+https://www.data.gov/
+https://www.census.gov/data.html
+https://data.gov.uk/
+https://www.opendatanetwork.com/
+https://data.un.org/
+Financial Data Sources:
+
+https://data.worldbank.org/
+https://www.globalfinancialdata.com/
+https://comtrade.un.org/
+https://www.nber.org/
+https://fred.stlouisfed.org/
+Crime Data:
+
+https://www.fbi.gov/services/cjis/ucr
+https://www.icpsr.umich.edu/icpsrweb/content/NACJD/index.html
+https://www.drugabuse.gov/related-topics/trends-statistics
+https://www.unodc.org/unodc/en/data-and-analysis/
+Health Data:
+
+https://www.who.int/gho/database/en/
+https://www.fda.gov/Food/default.htm
+https://seer.cancer.gov/faststats/selections.php?series=cancer
+https://www.opensciencedatacloud.org/
+https://pds.nasa.gov/
+https://earthdata.nasa.gov/
+https://www.sgim.org/communities/research/dataset-compendium/public-datasets-topic-grid
+Academic and Business Data:
+
+https://scholar.google.com/
+https://nces.ed.gov/
+https://www.glassdoor.com/research/
+https://www.yelp.com/dataset
+Other General Data:
+
+https://www.kaggle.com/datasets
+https://www.reddit.com/r/datasets/
+
+
+Python
+
+Use # for heagers e.g # This is a header
+                      ## This is another header
+
+use ** or __ for bold  **Bold Text using asterisks.**  
+                       __Bold Text using underscores.__
+                            
+
+***Bold and Italic text using asterisks.***  
+___Bold and Italic text using underscores.___
+
+Hyperlink
+
+[Name of link](link url)
+# Execute it as a markdown cell
+[Skills Network](https://skills.network/) 
+
+
+Image
+
+Name of Image: ![Alt text](image path)
+LOGO: ![This is the skills network logo](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/assets/logos/SN_web_lightmode.png)
+
+
+Creating Tables
+
+hyphens (----) for column headers
+pipes | to separate each column
+Text on a new line to separate each row
+
+| Country Name | Capital |
+| -------------| ------ |
+| United States | Washington DC |
+| Australia | Canberra |
+| India | New Delhi |
+
+
+Ordered List
+
+We can create an ordered list by adding line items with numbers followed by periods.
+
+Image
+
+
+GIT HUB
+
+Create a myrepo directory by running the mkdir command given below in the terminal.
+mkdir myrepo
+
+Go into the myrepo directory by running the following command.
+cd myrepo
+
+Initiate the myrepo directory as a git repository by using the git init command.
+git init
+
+Now create an empty file named newfile using the following touch command.
+touch newfile
+
+Add this file to the repo use the following git add command.
+git add newfile
+
+
+Before you commit the changes, you need to tell Git who you are. You can do this using the following commands. Replace “you@example.com“ 
+with the email address you use to login to GitHub. Replace “Your Name” with your name.
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
+You can now commit your changes using the following git commit command.
+git commit -m "added newfile"
+
+To make subsequent changes in your repository, create a new branch in your local repostitory.
+Run the following git branch command into the terminal to create a branch called my1stbranch.
+git branch my1stbranch
+
+Check the list of branches your repository contains by running the following git branch command.
+git branch
+
+Since you now want to work in the new branch to make your changes, 
+run the following git checkout command to make it the active branch.
+git checkout my1stbranch
+
+Verify that the new branch is now the active branch by running the following git branch command.
+git branch
+
+As a shortcut, instead of creating a branch using git branch and then making it active using git checkout, 
+you can use the git checkout command followed by the -b option, that creates the branch and makes it active in one step.
+git checkout -b my1stbranch
+
+Make some changes to your new branch, called my1stbranch. Start by adding some text to newfile by running the following command 
+into the terminal that will append the string "Here is some text in my newfile." into the file.
+echo 'Here is some text in my newfile.' >> newfile
+
+Verify the text has been added by running the following cat command.
+cat newfile
+
+So far, in your new branch, you have edited the newfile and added a file called readme.md. 
+You can easily verify the changes in your current branch using the git status command.
+git status
+
+A shortcut to adding all modifications and additions is to use the following git add command with an asterisk * . 
+This will also add the modified file newfile to the branch and make it ready to be committed.
+git add *
+
+We can run the following git log command to get a history of recent commits:
+git log
+
+Now, let's merge the changes from my1stbranch into master. 
+git checkout master (to switch to the master branch first before the merge)
+git merge my1stbranch
+git log
+
+Now that changes have been merged into master branch, the my1stbranch can be deleted using 
+the following git branch command with the -d option:
+git branch -d my1stbranch
